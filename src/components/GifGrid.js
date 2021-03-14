@@ -1,22 +1,20 @@
-import React, {useState, useEffect} from 'react'
-import { getGifs } from '../helpers/getGifs';
+import React from 'react'
+import { useFetchGifs } from '../hooks/useFetchGifs';
 import { GifGridItem } from './GifGridItem';
 
 export const GifGrid = ({category}) => {
 
-    const [images, setImages] = useState([])
+    
+    const {data: images, loading} = useFetchGifs(category);
 
-    useEffect(()=>{//Use efect se utiliza para condicionar funcionalidades en el codigo
-        getGifs(category)
-            .then(setImages)
-    },[category])//Si el segundo parametro esta vacio, solo ejecuta la instruccion dentro una vez// Se agrega category para que si cambia, re renderize el componente
 
     return (
         <>
-        <h3>{category}</h3>
+        <h3 className="animate__animated animate__fadeIn">{category}</h3>
+        {loading && <p className="animate__animated animate__flash">Loading</p>}
         <div className="card-grid">
                 {
-                    images.map((img) => ( //Se desestructura el arreglo para acceder a los datos
+                    images.map((img) => ( 
                         <GifGridItem 
                             key = {img.id}
                             {...img}
